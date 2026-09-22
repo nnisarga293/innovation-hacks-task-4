@@ -1,0 +1,7 @@
+const router=require('express').Router(); const Project=require('../models/Project'); const Task=require('../models/Task'); const auth=require('../middleware/auth'); router.use(auth);
+router.get('/',async(req,res,next)=>{try{res.json(await Project.find({owner:req.user.id}).sort({createdAt:-1}))}catch(e){next(e)}});
+router.post('/',async(req,res,next)=>{try{if(!req.body.name?.trim())return res.status(400).json({message:'Project name is required'});res.status(201).json(await Project.create({name:req.body.name,description:req.body.description||'',owner:req.user.id}))}catch(e){next(e)}});
+router.get('/:id',async(req,res,next)=>{try{const p=await Project.findOne({_id:req.params.id,owner:req.user.id});if(!p)return res.status(404).json({message:'Project not found'});const tasks=await Task.find({project:p._id}).populate('assignee','name email').sort({createdAt:-1});res.json({project:p,tasks})}catch(e){next(e)}});
+router.put('/:id',async(req,res,next)=>{try{const p=await Project.findOneAndUpdate({_id:req.params.id,owner:req.user.id},{name:req.body.name,description:req.body.description},{new:true,runValidators:true});if(!p)return res.status(404).json({message:'Project not found'});res.json(p)}catch(e){next(e)}});
+router.delete('/:id',async(req,res,next)=>{try{const p=await Project.findOneAndDelete({_id:req.params.id,owner:req.user.id});if(!p)return res.status(404).json({message:'Project not found'});await Task.deleteMany({project:p._id});res.json({message:'Project deleted'})}catch(e){next(e)}});
+module.exports=router;
