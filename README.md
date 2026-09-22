@@ -63,6 +63,20 @@ Open the Vite URL shown in the terminal, normally `http://localhost:5173`.
 ## AI Feature
 Click **AI Tasks** on the dashboard after creating a project. If `GEMINI_API_KEY` is present, the app requests task suggestions from Gemini. Without a key, the app uses a clearly labeled built-in fallback generator for local demonstrations.
 
+## Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Tasks
+![Tasks](screenshots/tasks.png)
+
+### AI-Assisted Task Generation
+![AI Tasks](screenshots/ai-tasks.png)
+
+### Projects
+![Projects](screenshots/projects.png)
+
 ## API Overview
 - `POST /api/auth/register`
 - `POST /api/auth/login`
